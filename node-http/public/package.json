@@ -1,12 +1,12 @@
 {
-  "name": "node-exmaples",
+  "name": "public",
   "version": "1.0.0",
-  "description": "a node example",
+  "description": "Node HTTP Module example",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "Node index"
+    "start": "node index"
   },
-  "author": "@luis Arthur",
+  "author": "Luis Arthu",
   "license": "ISC"
 }
