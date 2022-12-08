@@ -3,7 +3,9 @@ const express = require('express');
 const http = require('http');
 const morgan = require('morgan'); // middleware to define an static file.
 const bodyParser = require('body-parser'); // middleware to  parse the body menssage.
-const dishRouter = require('./routs.js')
+const dishRouter = require('./routs.js');
+const promoRouter = require('./promoRouter.js');
+const leadersRouter = require('./leadersRouter.js')
 
 var hostname = 'localhost';
 var port = 3000;
@@ -14,7 +16,10 @@ var server = http.createServer(app);
 app.use(morgan('dev'));
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json())
-app.use('/dishes', dishRouter)
+//Server routs
+app.use('/dishes', dishRouter);
+app.use('/promotions', promoRouter);
+app.use('/leaders', leadersRouter);
 
 
 //main page(route)
