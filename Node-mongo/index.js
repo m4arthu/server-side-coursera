@@ -1,36 +1,39 @@
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
+const dboper = require('./operations.js')
 
 const url = 'mongodb://127.0.0.1:27017/';
 const dbname = 'confusion'; //should have the same name thane was created in the mongoDB server
 
 MongoClient.connect(url, (err, client) => {
-    
+
     assert.equal(err, null);
     console.log('Connected correctly to server');
 
-    const db = client.db(dbname);
-    const collection = db.collection("dishes");
+    const db = client.db(dbname)
 
+    dboper.insertDocument(db, { name: "Vadonut", description: "Test" },
+        "dishes", (result) => {
+            console.log("Insert Document:\n", result.ops);
 
-    collection.insertOne({ "name": "Uthappizza", "description": "test" },
-        (err, result) => {
-            assert.equal(err, null);
+            dboper.findDocuments(db, "dishes", (docs) => {
+                console.log("Found Documents:\n", docs);
 
-            console.log("After Insert:\n");
-            console.log(result.ops);
+                dboper.updateDocument(db, { name: "Vadonut" },
+                    { description: "Updated Test" }, "dishes",
+                    (result) => {
+                        console.log("Updated Document:\n", result.result);
 
-            collection.find({}).toArray((err, docs) => {
-                assert.equal(err, null);
+                        dboper.findDocuments(db, "dishes", (docs) => {
+                            console.log("Found Updated Documents:\n", docs);
 
-                console.log("Found:\n");
-                console.log(docs);
+                            db.dropCollection("dishes", (result) => {
+                                console.log("Dropped Collection: ", result);
 
-                db.dropCollection("dishes", (err, result) => {
-                    assert.equal(err, null);
-
-                    client.close();
-                });
+                                client.close();
+                            });
+                        });
+                    });
             });
         });
 });
