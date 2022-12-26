@@ -7,8 +7,7 @@ var mongoose = require('mongoose')
 var session = require('express-session')
 var FileStore = require('session-file-store')(session);
 var passport = require('passport');
-var authenticate = require('./authenticate.js')
-
+var config = require('./config.js')
 
 //importing files modules
 var dishRouter = require('./routes/dishRouter.js');
@@ -19,7 +18,7 @@ var usersRouter = require('./routes/users.js');
 
 
 // mongoDb server configuration 
-const url = 'mongodb://127.0.0.1:27017/confusion';
+const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 connect.then((db) => {
   console.log('Connected correctly to  server');
@@ -33,10 +32,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-//seting Server sets/routes
-app.use('/dishes', dishRouter);
-app.use('/promotions', promoRouter);
-app.use('/leaders', leadersRouter);
+//seting Server sets
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -49,22 +45,15 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session())
-app.use('/', indexRouter);
-app.use('/users', usersRouter)
 
-function auth(req, res, next) {
-  console.log(req.User);
-  
-  if (!req.User) {
-    var err = new Error('You are not authenticated!');
-    err.status = 403;
-    next(err);
-  }
-  else {
-        next();
-  }
-}
-app.use(auth)
+// server  routes
+app.use('/', indexRouter);
+app.use('/users', usersRouter);0
+
+app.use('/dishes', dishRouter);
+app.use('/promotions', promoRouter);
+app.use('/leaders', leadersRouter);
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
