@@ -38,7 +38,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
   name: 'session-id',
-  secret: '1234567890-09',
+  secret: '1234567890-0987654321',
   saveUninitialized: false,
   resave: false,
   store: new FileStore()

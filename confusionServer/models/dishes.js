@@ -1,4 +1,4 @@
-const mongoose =require('mongoose');
+const mongoose = require('mongoose');
 const Schema = mongoose.Schema
 
 require('mongoose-currency').loadType(mongoose) // load a new type of currency in  mongoose
@@ -13,12 +13,12 @@ var commentSchema = new Schema({
         required: true
     },
     comment:  {
-        type: String,
+        type: String ,
         required: true
     },
     author:  {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 }, {
     timestamps: true
